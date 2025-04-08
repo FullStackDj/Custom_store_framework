@@ -31,7 +31,6 @@ function autoloadMainClasses($class_name) {
     if (!@include_once $class_name . '.php') {
         throw new RouteException('Unable to load class: ' . $class_name);
     }
-    include $class_name . '.php';
 }
 
 spl_autoload_register('autoloadMainClasses');
