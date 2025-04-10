@@ -6,15 +6,11 @@ use core\base\exceptions\RouteException;
 use core\base\settings\Settings;
 use core\base\settings\ShopSettings;
 
-class RouteController {
+class RouteController extends BaseController{
     static private $_instance;
 
     protected $routes;
 
-    protected $controller;
-    protected $inputMethod;
-    protected $outputMethod;
-    protected $parameters;
 
     private function __clone() {
 
@@ -39,13 +35,16 @@ class RouteController {
         $path = substr($_SERVER['PHP_SELF'], 0, strpos($_SERVER['PHP_SELF'], 'index.php'));
 
         if ($path === PATH) {
+
             $this->routes = Settings::get('routes');
 
             if (!$this->routes) throw new RouteException('The website is under maintenance');
 
-            if (strpos($address_str, $this->routes['admin']['alias']) === strlen(PATH)) {
+            $url = explode('/', substr($address_str, strlen(PATH)));
 
-                $url = explode('/', substr($address_str, strlen(PATH . $this->routes['admin']['alias']) + 1));
+            if ($url[0] && $url[0] === $this->routes['admin']['alias'] ) {
+
+                array_shift($url);
 
                 if ($url[0] && is_dir($_SERVER['DOCUMENT_ROOT'] . PATH . $this->routes['plugins']['path'] . $url[0])) {
 
@@ -77,8 +76,6 @@ class RouteController {
 
             } else {
 
-                $url = explode('/', substr($address_str, strlen(PATH)));
-
                 $hrUrl = $this->routes['user']['hrUrl'];
 
                 $this->controller = $this->routes['user']['path'];
@@ -109,9 +106,7 @@ class RouteController {
                     }
                 }
             }
-
-            exit ();
-
+            
         } else {
             try {
                 throw new \Exception('The incorrect website directory');
