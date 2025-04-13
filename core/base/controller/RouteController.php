@@ -6,7 +6,7 @@ use core\base\exceptions\RouteException;
 use core\base\settings\Settings;
 use core\base\settings\ShopSettings;
 
-class RouteController extends BaseController{
+class RouteController extends BaseController {
     static private $_instance;
 
     protected $routes;
@@ -42,7 +42,7 @@ class RouteController extends BaseController{
 
             $url = explode('/', substr($address_str, strlen(PATH)));
 
-            if ($url[0] && $url[0] === $this->routes['admin']['alias'] ) {
+            if ($url[0] && $url[0] === $this->routes['admin']['alias']) {
 
                 array_shift($url);
 
@@ -106,7 +106,7 @@ class RouteController extends BaseController{
                     }
                 }
             }
-            
+
         } else {
             try {
                 throw new \Exception('The incorrect website directory');
