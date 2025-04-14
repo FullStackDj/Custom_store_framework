@@ -12,6 +12,9 @@ abstract class BaseController {
     protected $page;
     protected $errors;
 
+    protected $styles;
+    protected $scripts;
+
     protected $controller;
     protected $inputMethod;
     protected $outputMethod;
@@ -53,7 +56,7 @@ abstract class BaseController {
         }
 
         if ($this->errors) {
-            $this->writeLog();
+            $this->writeLog($this->errors);
         }
 
         $this->getPage();
@@ -90,5 +93,25 @@ abstract class BaseController {
             echo $this->page;
         }
         exit();
+    }
+
+    protected function init($admin = false) {
+
+        if (!$admin) {
+            if (USER_CSS_JS['styles']) {
+                foreach (USER_CSS_JS['styles'] as $item) $this->styles[] = PATH . TEMPLATE . trim($item, '/');
+            }
+
+            if (USER_CSS_JS['scripts']) {
+                foreach (USER_CSS_JS['scripts'] as $item) $this->scripts[] = PATH . TEMPLATE . trim($item, '/');
+            }
+        } else {
+            if (ADMIN_CSS_JS['styles']) {
+                foreach (ADMIN_CSS_JS['styles'] as $item) $this->styles[] = PATH . ADMIN_TEMPLATE . trim($item, '/');
+            }
+            if (ADMIN_CSS_JS['scripts']) {
+                foreach (ADMIN_CSS_JS['scripts'] as $item) $this->scripts[] = PATH . ADMIN_TEMPLATE . trim($item, '/');
+            }
+        }
     }
 }
