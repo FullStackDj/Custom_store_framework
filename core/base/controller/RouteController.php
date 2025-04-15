@@ -4,7 +4,6 @@ namespace core\base\controller;
 
 use core\base\exceptions\RouteException;
 use core\base\settings\Settings;
-use core\base\settings\ShopSettings;
 
 class RouteController extends BaseController {
 
@@ -26,7 +25,7 @@ class RouteController extends BaseController {
 
             $this->routes = Settings::get('routes');
 
-            if (!$this->routes) throw new RouteException('The website is under maintenance');
+            if (!$this->routes) throw new RouteException('Missing routes in basic settings', 1);
 
             $url = explode('/', substr($address_str, strlen(PATH)));
 
@@ -96,11 +95,7 @@ class RouteController extends BaseController {
             }
 
         } else {
-            try {
-                throw new \Exception('The incorrect website directory');
-            } catch (\Exception $e) {
-                exit($e->getMessage());
-            }
+            throw new RouteException('The incorrect website directory', 1);
         }
     }
 

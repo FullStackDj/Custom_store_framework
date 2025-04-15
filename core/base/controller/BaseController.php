@@ -49,7 +49,7 @@ abstract class BaseController {
         $data = $this->$inputData();
 
         if (method_exists($this, $outputData)) {
-            $page = $this->outputData($data);
+            $page = $this->$outputData($data);
             if ($page) $this->page = $page;
         } elseif ($data) {
             $this->page = $data;
