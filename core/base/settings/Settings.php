@@ -44,6 +44,8 @@ class Settings {
         'textarea' => ['content', 'keywords']
     ];
 
+    private $defaultTable = 'table_test1';
+
     private $test1 = 'test1';
 
 
