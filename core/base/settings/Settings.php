@@ -46,7 +46,7 @@ class Settings {
 
     private $defaultTable = 'table_test1';
 
-    private $test1 = 'test1';
+    private $expansion = 'core/admin/expansion/';
 
 
     static public function get($property) {

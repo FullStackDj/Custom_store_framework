@@ -60,75 +60,47 @@ abstract class BaseAdmin extends BaseController {
 
     }
 
-    protected function createData($arr = [], $add = true) {
 
-        $fields = [];
-        $order = [];
-        $order_direction = [];
+    protected function expansion($args = [], $settings = false) {
 
-        if ($add) {
-            if (!$this->columns['id_row']) return $this->data = [];
+        $filename = explode('_', $this->table);
+        $className = '';
 
-            $fields[] = $this->columns['id_row'] . ' as id';
+        foreach ($filename as $item) $className .= ucfirst($item);
 
-            if ($this->columns['name']) $fields['name'] = 'name';
-            if ($this->columns['img']) $fields['img'] = 'img';
+        if (!$settings) {
+            $path = Settings::get('expansion');
+        } elseif (is_object($settings)) {
+            $path = $settings::get('expansion');
+        } else {
+            $path = $settings;
+        }
 
-            if (count($fields) < 3) {
+        $class = $path . $className . 'Expansion';
 
-                foreach ($this->columns as $key => $item) {
 
-                    if (!$fields['name'] && strpos($key, 'name') !== false) {
-                        $fields['name'] = $key . ' as name';
-                    }
+        if (is_readable($_SERVER['DOCUMENT_ROOT'] . PATH . $class . '.php')) {
 
-                    if (!$fields['img'] && strpos($key, 'img') === 0) {
-                        $fields['img'] = $key . ' as img';
-                    }
-                }
+            $class = str_replace('/', '\\', $class);
+
+            $exp = $class::instance();
+
+            foreach ($this as $name => $value) {
+                $exp->$name = &$this->$name;
             }
 
-            if ($arr['fields']) {
-                $fields = Settings::instance()->arrayMergeRecursive($fields, $arr['fields']);
-            }
-
-            if ($this->columns['parent_id']) {
-                if (!in_array('parent_id', $fields)) $fields[] = 'parent_id';
-                $order[] = 'parent_id';
-            }
-
-            if ($this->columns['menu_position']) $order[] = 'menu_position';
-            elseif ($this->columns['date']) {
-
-                if ($order) $order_direction = ['ASC', 'DESC'];
-                else $order_direction[] = ['DESC'];
-
-                $order[] = 'date';
-            }
-
-            if ($arr['order']) {
-                $order = Settings::instance()->arrayMergeRecursive($order, $arr['order']);
-            }
-
-            if ($arr['order_direction']) {
-                $order_direction = Settings::instance()->arrayMergeRecursive($order_direction, $arr['order_direction']);
-            }
+            return $exp->expansion($args);
 
         } else {
 
-            if (!$arr) return $this->data = [];
+            $file = $_SERVER['DOCUMENT_ROOT'] . PATH . $path . $this->table . '.php';
 
-            $fields = $arr['fields'];
-            $order = $arr['order'];
-            $order_direction = $arr['order_direction'];
+            extract($args);
+
+            if (is_readable($file)) return include $file;
+
         }
 
-        $this->data = $this->model->get($this->table, [
-            'fields' => $fields,
-            'order' => $order,
-            'order_direction' => $order_direction
-        ]);
-
-        exit;
+        return false;
     }
 }
