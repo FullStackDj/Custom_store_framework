@@ -39,11 +39,6 @@ class Settings {
         ],
     ];
 
-    private $templateArr = [
-        'text' => ['name', 'phone', 'address'],
-        'textarea' => ['content', 'keywords']
-    ];
-
     private $expansion = 'core/admin/expansion/';
 
     private $defaultTable = 'table_test1';
@@ -52,6 +47,23 @@ class Settings {
         'table_test1' => ['name' => 'test1', 'img' => 'pages.png'],
         'table_test2' => ['name' => 'test2', 'img' => 'pages.png'],
     ];
+
+    private $templateArr = [
+        'text' => ['name', 'phone', 'address'],
+        'textarea' => ['content', 'keywords']
+    ];
+
+    private $translate = [
+        'name' => ['name', 'no more than 100 characters'],
+        'content' => []
+    ];
+
+    private $blockNeedle = [
+        'vg-rows' => [],
+        'vg_img' => ['id'],
+        'vg-content' => ['content']
+    ];
+
 
     static public function get($property) {
         return self::instance()->$property;
