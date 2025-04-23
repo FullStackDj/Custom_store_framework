@@ -9,16 +9,21 @@ abstract class BaseController {
 
     use \core\base\controller\BaseMethods;
 
+    protected $header;
+    protected $content;
+    protected $footer;
     protected $page;
-    protected $errors;
 
-    protected $styles;
-    protected $scripts;
+    protected $errors;
 
     protected $controller;
     protected $inputMethod;
     protected $outputMethod;
     protected $parameters;
+
+    protected $template;
+    protected $styles;
+    protected $scripts;
 
     public function route() {
         $controller = str_replace('/', '\\', $this->controller);

@@ -44,10 +44,14 @@ class Settings {
         'textarea' => ['content', 'keywords']
     ];
 
-    private $defaultTable = 'table_test1';
-
     private $expansion = 'core/admin/expansion/';
 
+    private $defaultTable = 'table_test1';
+
+    private $projectTables = [
+        'table_test1' => ['name' => 'test1', 'img' => 'pages.png'],
+        'table_test2' => ['name' => 'test2', 'img' => 'pages.png'],
+    ];
 
     static public function get($property) {
         return self::instance()->$property;
