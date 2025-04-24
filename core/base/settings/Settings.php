@@ -58,6 +58,11 @@ class Settings {
         'content' => []
     ];
 
+    private $rootItems = [
+        'name' => 'Root',
+        'tables' => ['articles']
+    ];
+
     private $blockNeedle = [
         'vg-rows' => [],
         'vg_img' => ['id'],
