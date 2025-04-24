@@ -58,6 +58,10 @@ class Settings {
         'content' => []
     ];
 
+    private $radio = [
+        'visible' => ['No', 'Yes', 'default' => 'Yes']
+    ];
+
     private $rootItems = [
         'name' => 'Root',
         'tables' => ['articles']
