@@ -64,7 +64,7 @@ class Settings {
 
     private $rootItems = [
         'name' => 'Root',
-        'tables' => ['articles']
+        'tables' => ['table_test1', 'articles']
     ];
 
     private $blockNeedle = [

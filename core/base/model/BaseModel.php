@@ -68,6 +68,7 @@ abstract class BaseModel extends BaseModelMethods {
      * @param $table
      * @param array $set
      * 'fields' => ['id', 'name'],
+     * 'no_concat' => false/true,
      * 'where' => ['id' => 1, 'name' => 'test2'],
      * 'operand' => ['=', '<>'],
      * 'condition' => ['AND'],
