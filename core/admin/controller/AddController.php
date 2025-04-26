@@ -20,6 +20,25 @@ class AddController extends BaseAdmin {
         $this->createRadio();
 
         $this->createOutputData();
+
+        $this->manyAdd();
+
+    }
+
+    protected function manyAdd() {
+
+        $fields = [
+            'name' => 'test22!!', 'menu_position' => 1
+        ];
+
+        $files = [//'img' => '1.jpg',
+            'img' => ['5.jpg', '6.jpg']
+        ];
+
+        $this->model->add('table_test1', [
+            'fields' => $fields,
+            'files' => $files,
+        ]);
     }
 
     protected function createForeignProperty($arr, $rootItems) {
