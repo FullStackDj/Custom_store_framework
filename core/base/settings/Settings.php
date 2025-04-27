@@ -43,14 +43,20 @@ class Settings {
 
     private $defaultTable = 'table_test1';
 
+    private $formTemplates = PATH . 'core/admin/view/include/form_templates/';
+
     private $projectTables = [
         'table_test1' => ['name' => 'test1', 'img' => 'pages.png'],
         'table_test2' => ['name' => 'test2', 'img' => 'pages.png'],
     ];
 
     private $templateArr = [
-        'text' => ['name', 'phone', 'address'],
-        'textarea' => ['content', 'keywords']
+        'text' => ['name'],
+        'textarea' => ['keywords', 'content'],
+        'radio' => ['visible'],
+        'select' => ['menu_position', 'parent_id'],
+        'img' => ['img'],
+        'gallery_img' => ['gallery_img'],
     ];
 
     private $translate = [
@@ -64,12 +70,12 @@ class Settings {
 
     private $rootItems = [
         'name' => 'Root',
-        'tables' => ['table_test1', 'articles']
+        'tables' => ['articles']
     ];
 
     private $blockNeedle = [
         'vg-rows' => [],
-        'vg_img' => ['id'],
+        'vg-img' => ['img'],
         'vg-content' => ['content']
     ];
 
