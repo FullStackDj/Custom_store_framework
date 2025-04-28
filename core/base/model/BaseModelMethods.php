@@ -161,15 +161,20 @@ abstract class BaseModelMethods {
                 if ($join) $join .= ' ';
 
                 if ($item['on']) {
-
                     $join_fields = [];
 
-                    if (isset($item['on']['fields']) && is_array($item['on']['fields']) && count($item['on']['fields']) === 2) {
-                        $join_fields = $item['on']['fields'];
-                    } elseif (is_array($item['on']) && count($item['on']) === 2) {
-                        $join_fields = $item['on'];
-                    } else {
-                        continue;
+                    switch (2) {
+
+                        case (is_array($item['on']['fields']) && count($item['on']['fields']));
+                            $join_fields = $item['on']['fields'];
+                            break;
+
+                        case (is_array($item['on']) && count($item['on'])):
+                            $join_fields = $item['on'];
+                            break;
+
+                        default:
+                            continue 2;
                     }
 
                     if (!$item['type']) $join .= 'LEFT JOIN ';
