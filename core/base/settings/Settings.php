@@ -41,6 +41,8 @@ class Settings {
 
     private $expansion = 'core/admin/expansion/';
 
+    private $messages = 'core/base/messages/';
+
     private $defaultTable = 'table_test1';
 
     private $formTemplates = PATH . 'core/admin/view/include/form_templates/';
@@ -60,7 +62,8 @@ class Settings {
     ];
 
     private $translate = [
-        'name' => ['name', 'no more than 100 characters'],
+        'name' => ['name', 'No more than 100 characters'],
+        'keywords' => ['Keywords', 'No more than 70 characters'],
         'content' => []
     ];
 
