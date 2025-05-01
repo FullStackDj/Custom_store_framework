@@ -4,8 +4,7 @@ defined('VG_ACCESS') or die('Access denied');
 
 const TEMPLATE = 'templates/default/';
 const ADMIN_TEMPLATE = 'core/admin/view/';
-const UPLOAD_DIR = 'userfiles/
-';
+const UPLOAD_DIR = 'userfiles/';
 const COOKIE_VERSION = '1.0.0';
 const CRYPT_KEY = '';
 const COOKIE_TIME = 60;

@@ -6,6 +6,7 @@ use core\admin\model\Model;
 use core\base\controller\BaseController;
 use core\base\exceptions\RouteException;
 use core\base\settings\Settings;
+use libraries\FileEdit;
 
 abstract class BaseAdmin extends BaseController {
 
@@ -375,6 +376,8 @@ abstract class BaseAdmin extends BaseController {
 
     protected function createFile() {
 
+        $fileEdit = new FileEdit();
+        $this->fileArray = $fileEdit->addFile();
     }
 
     protected function updateMenuPosition() {

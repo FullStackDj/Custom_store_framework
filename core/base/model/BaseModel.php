@@ -52,7 +52,7 @@ abstract class BaseModel extends BaseModelMethods {
 
                 return false;
 
-            case 's':
+            case 'c':
 
                 if ($return_id) return $this->db->insert_id;
 
@@ -219,5 +219,24 @@ abstract class BaseModel extends BaseModelMethods {
         }
 
         return $columns;
+    }
+
+    final public function showTables() {
+
+        $query = 'SHOW TABLES';
+
+        $tables = $this->query($query);
+
+        $table_arr = [];
+
+        if ($tables) {
+
+            foreach ($tables as $table) {
+
+                $table_arr[] = reset($table);
+            }
+        }
+
+        return $table_arr;
     }
 }
