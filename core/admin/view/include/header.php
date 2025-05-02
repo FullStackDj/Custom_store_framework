@@ -40,11 +40,11 @@
                     </form>
                 </div>
             </div>
-            <a href="<?= PATH . \core\base\settings\Settings::get('route')['admin']['alias'] ?>/createsitemap"
+            <a href="<?= PATH . \core\base\settings\Settings::get('routes')['admin']['alias'] . '/createsitemap' ?>"
                class="vg-element vg-box-shadow sitemap-button">
-                        <span class="vg-text vg-firm-color1">
-                            Create sitemap
-                        </span>
+                    <span class="vg-text vg-firm-color1">
+                        Create sitemap
+                    </span>
             </a>
             <div class="vg-element vg-fifth">
                 <div class="vg-element vg-half vg-right">
