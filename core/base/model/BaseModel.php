@@ -2,7 +2,7 @@
 
 namespace core\base\model;
 
-use core\base\exceptions\DbException;
+use core\base\exceptions\DBException;
 
 abstract class BaseModel extends BaseModelMethods {
 
@@ -14,7 +14,7 @@ abstract class BaseModel extends BaseModelMethods {
 
         if ($this->db->connect_error) {
 
-            throw new DbException('Connection failed: ' . $this->db->connect_errno . ' ' . $this->db->connect_error);
+            throw new DBException('Connection failed: ' . $this->db->connect_errno . ' ' . $this->db->connect_error);
         }
 
         $this->db->query("SET NAMES UTF8");
@@ -25,7 +25,7 @@ abstract class BaseModel extends BaseModelMethods {
      * @param $crud = r - SELECT / c - INSERT / u - UPDATE / d - DELETE
      * @param $return_id
      * @return array|bool
-     * @throws DbException
+     * @throws DBException
      */
 
     final public function query($query, $crud = 'r', $return_id = false) {
@@ -33,7 +33,7 @@ abstract class BaseModel extends BaseModelMethods {
         $result = $this->db->query($query);
 
         if ($this->db->affected_rows === -1) {
-            throw new DbException('Query failed: ' . $query . ' - ' . $this->db->errno . ' ' . $this->db->error);
+            throw new DBException('Query failed: ' . $query . ' - ' . $this->db->errno . ' ' . $this->db->error);
         }
 
         switch ($crud) {

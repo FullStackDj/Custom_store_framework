@@ -4,7 +4,7 @@ namespace core\base\exceptions;
 
 use core\base\controller\BaseMethods;
 
-class DbException extends \Exception {
+class DBException extends \Exception {
 
     protected $messages;
 
