@@ -10,6 +10,20 @@ abstract class BaseModelMethods {
 
     protected function createFields($set, $table = false, $join = false) {
 
+        if (array_key_exists('fields', $set) && $set['fields'] === null) return '';
+
+        $concat_table = '';
+        $alias_table = $table;
+
+        if (!$set['no_concat']) {
+
+            $arr = $this->createTableAlias($table);
+
+            $concat_table = $arr['alias'] . '.';
+
+            $alias_table = $arr['alias'];
+        }
+
         $fields = '';
 
         $join_structure = false;
@@ -23,8 +37,6 @@ abstract class BaseModelMethods {
             if (isset($this->tableRows[$table]['multi_id_row'])) $set['fields'] = [];
         }
 
-        $concat_table = $table && !$set['concat'] ? $table . '.' : '';
-
         if (!isset($set['fields']) || !is_array($set['fields']) || !$set['fields']) {
 
             if (!$join) {
@@ -33,11 +45,11 @@ abstract class BaseModelMethods {
 
             } else {
 
-                foreach ($this->tableRows[$table] as $key => $item) {
+                foreach ($this->tableRows[$alias_table] as $key => $item) {
 
                     if ($key !== 'id_row' && $key !== 'multi_id_row') {
 
-                        $fields .= $concat_table . $key . ' as TABLE' . $table . 'TABLE_' . $key . ',';
+                        $fields .= $concat_table . $key . ' as TABLE' . $alias_table . 'TABLE_' . $key . ',';
                     }
                 }
             }
@@ -48,7 +60,7 @@ abstract class BaseModelMethods {
 
             foreach ($set['fields'] as $field) {
 
-                if ($join_structure && !$id_field && $this->tableRows[$table] === $field) {
+                if ($join_structure && !$id_field && $this->tableRows[$alias_table] === $field) {
 
                     $id_field = true;
                 }
@@ -59,11 +71,11 @@ abstract class BaseModelMethods {
 
                         if (preg_match('/^(.+)?\s+as\s+(.+)/i', $field, $matches)) {
 
-                            $fields .= $concat_table . $matches[1] . ' as TABLE' . $table . 'TABLE_' . $matches[2] . ',';
+                            $fields .= $concat_table . $matches[1] . ' as TABLE' . $alias_table . 'TABLE_' . $matches[2] . ',';
 
                         } else {
 
-                            $fields .= $concat_table . $field . ' as TABLE' . $table . 'TABLE_' . $field . ',';
+                            $fields .= $concat_table . $field . ' as TABLE' . $alias_table . 'TABLE_' . $field . ',';
 
                         }
 
@@ -78,28 +90,31 @@ abstract class BaseModelMethods {
 
                 if ($join) {
 
-                    $fields .= $concat_table . $this->tableRows[$table]['id_row'] . ' as TABLE' . $table . 'TABLE_' . $this->tableRows[$table]['id_row'] . ',';
+                    $fields .= $concat_table . $this->tableRows[$alias_table]['id_row'] . ' as TABLE' . $alias_table . 'TABLE_' . $this->tableRows[$alias_table]['id_row'] . ',';
 
                 } else {
 
-                    $fields .= $concat_table . $this->tableRows[$table]['id_row'] . ',';
+                    $fields .= $concat_table . $this->tableRows[$alias_table]['id_row'] . ',';
                 }
             }
         }
-
 
         return $fields;
     }
 
     protected function createOrder($set, $table = false) {
 
-        $table = ($table && !$set['no_concat']) ? $table . '.' : '';
+        $table = ($table && (!isset($set['no_concat']) || !$set['no_concat']))
+            ? $this->createTableAlias($table)['alias'] . '.' : '';
 
         $order_by = '';
 
-        if (is_array($set['order']) && !empty($set['order'])) {
+        if (isset($set['order']) && $set['order']) {
 
-            $set['order_direction'] = (is_array($set['order_direction']) && !empty($set['order_direction'])) ? $set['order_direction'] : ['ASC'];
+            $set['order'] = (array)$set['order'];
+
+            $set['order_direction'] = (isset($set['order_direction']) && $set['order_direction'])
+                ? (array)$set['order_direction'] : ['ASC'];
 
             $order_by = 'ORDER BY ';
             $direct_count = 0;
@@ -113,7 +128,8 @@ abstract class BaseModelMethods {
                     $order_direction = strtoupper($set['order_direction'][$direct_count - 1]);
                 }
 
-                if (is_int($order)) $order_by .= $order . ' ' . $order_direction . ',';
+                if (in_array($order, $this->sqlFunc)) $order_by .= $order . ',';
+                elseif (is_int($order)) $order_by .= $order . ' ' . $order_direction . ',';
                 else $order_by .= $table . $order . ' ' . $order_direction . ',';
             }
 
@@ -125,7 +141,8 @@ abstract class BaseModelMethods {
 
     protected function createWhere($set, $table = false, $instruction = 'WHERE') {
 
-        $table = ($table && !$set['no_concat']) ? $table . '.' : '';
+        $table = ($table && (!isset($set['no_concat']) || !$set['no_concat']))
+            ? $this->createTableAlias($table)['alias'] . '.' : '';
 
         $where = '';
 
@@ -227,34 +244,37 @@ abstract class BaseModelMethods {
                     else $key = $item['table'];
                 }
 
+                $concatTable = $this->createTableAlias($key)['alias'];
+
                 if ($join) $join .= ' ';
 
-                if ($item['on']) {
-                    $join_fields = [];
+                if (isset($item['on']) && $item['on']) {
 
-                    switch (2) {
+                    if (isset($item['on']['fields']) && is_array($item['on']['fields']) && count($item['on']['fields']) === 2) {
 
-                        case (is_array($item['on']['fields']) && count($item['on']['fields']));
-                            $join_fields = $item['on']['fields'];
-                            break;
+                        $join_fields = $item['on']['fields'];
 
-                        case (is_array($item['on']) && count($item['on'])):
-                            $join_fields = $item['on'];
-                            break;
+                    } elseif (count($item['on']) === 2) {
 
-                        default:
-                            continue 2;
+                        $join_fields = $item['on'];
+
+                    } else {
+
+                        continue;
                     }
+
 
                     if (!$item['type']) $join .= 'LEFT JOIN ';
                     else $join .= trim(strtoupper($item['type'])) . ' JOIN ';
 
                     $join .= $key . ' ON ';
 
-                    if ($item['on']['table']) $join .= $item['on']['table'];
-                    else $join .= $join_table;
+                    if ($item['on']['table']) $join_temp_table = $item['on']['table'];
+                    else $join_temp_table = $join_table;
 
-                    $join .= '.' . $join_fields[0] . '=' . $key . '.' . $join_fields[1];
+                    $join .= $this->createTableAlias($join_temp_table)['alias'];
+
+                    $join .= '.' . $join_fields[0] . '=' . $concatTable . '.' . $join_fields[1];
 
                     $join_table = $key;
 
@@ -278,7 +298,8 @@ abstract class BaseModelMethods {
         return compact('fields', 'join', 'where');
     }
 
-    protected function createInsert($fields, $files, $except) {
+    protected
+    function createInsert($fields, $files, $except) {
 
         $insert_arr = [];
 
@@ -374,7 +395,8 @@ abstract class BaseModelMethods {
         return $insert_arr;
     }
 
-    protected function createUpdate($fields, $files, $except) {
+    protected
+    function createUpdate($fields, $files, $except) {
 
         $update = '';
 
@@ -409,11 +431,12 @@ abstract class BaseModelMethods {
         return rtrim($update, ',');
     }
 
-    protected function joinStructure($res, $table) {
+    protected
+    function joinStructure($res, $table) {
 
         $join_arr = [];
 
-        $id_row = $this->tableRows[$table]['id_row'];
+        $id_row = $this->tableRows[$this->createTableAlias($table)['alias']]['id_row'];
 
         foreach ($res as $value) {
 
@@ -457,5 +480,27 @@ abstract class BaseModelMethods {
         }
 
         return $join_arr;
+    }
+
+    protected function createTableAlias($table) {
+
+        $arr = [];
+
+        if (preg_match('/\s+/i', $table)) {
+
+            $table = preg_replace('/\s{2,}/i', ' ', $table);
+
+            $table_name = explode(' ', $table);
+
+            $arr['table'] = trim($table_name[0]);
+
+            $arr['alias'] = trim($table_name[1]);
+
+        } else {
+
+            $arr['alias'] = $arr['table'] = $table;
+        }
+
+        return $arr;
     }
 }
