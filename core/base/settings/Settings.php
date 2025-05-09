@@ -43,7 +43,7 @@ class Settings {
 
     private $messages = 'core/base/messages/';
 
-    private $defaultTable = 'table_test1';
+    private $defaultTable = 'goods';
 
     private $formTemplates = PATH . 'core/admin/view/include/form_templates/';
 
@@ -56,6 +56,7 @@ class Settings {
         'text' => ['name'],
         'textarea' => ['keywords', 'content'],
         'radio' => ['visible'],
+        'checkboxList' => ['filters'],
         'select' => ['menu_position', 'parent_id'],
         'img' => ['img'],
         'gallery_img' => ['gallery_img'],
@@ -74,6 +75,10 @@ class Settings {
     private $rootItems = [
         'name' => 'Root',
         'tables' => ['articles']
+    ];
+
+    private $manyToMany = [
+        'goods_filter' => ['goods', 'filters'] // 'type' => 'child' || 'root'
     ];
 
     private $blockNeedle = [
