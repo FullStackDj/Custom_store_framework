@@ -48,15 +48,15 @@ class Settings {
     private $formTemplates = PATH . 'core/admin/view/include/form_templates/';
 
     private $projectTables = [
-        'table_test1' => ['name' => 'test1', 'img' => 'pages.png'],
-        'table_test2' => ['name' => 'test2', 'img' => 'pages.png'],
+        'goods' => ['name' => 'Goods', 'img' => 'pages.png'],
+        'filters' => ['name' => 'Filters'],
     ];
 
     private $templateArr = [
         'text' => ['name'],
         'textarea' => ['keywords', 'content'],
         'radio' => ['visible'],
-        'checkboxList' => ['filters'],
+        'checkboxlist' => ['filters'],
         'select' => ['menu_position', 'parent_id'],
         'img' => ['img'],
         'gallery_img' => ['gallery_img'],
@@ -78,7 +78,7 @@ class Settings {
     ];
 
     private $manyToMany = [
-        'goods_filter' => ['goods', 'filters'] // 'type' => 'child' || 'root'
+        'goods_filters' => ['goods', 'filters'] // 'type' => 'child' || 'root'
     ];
 
     private $blockNeedle = [
