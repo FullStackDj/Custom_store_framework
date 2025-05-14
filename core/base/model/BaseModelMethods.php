@@ -298,8 +298,7 @@ abstract class BaseModelMethods {
         return compact('fields', 'join', 'where');
     }
 
-    protected
-    function createInsert($fields, $files, $except) {
+    protected function createInsert($fields, $files, $except) {
 
         $insert_arr = [];
 
