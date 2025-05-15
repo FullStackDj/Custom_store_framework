@@ -130,7 +130,7 @@ abstract class BaseModelMethods {
 
                 if (in_array($order, $this->sqlFunc)) $order_by .= $order . ',';
                 elseif (is_int($order)) $order_by .= $order . ' ' . $order_direction . ',';
-                else $order_by .= $table . $order . ' ' . $order_direction . ',';
+                else $order_by .= $order . ' ' . $order_direction . ',';
             }
 
             $order_by = rtrim($order_by, ',');
@@ -215,6 +215,9 @@ abstract class BaseModelMethods {
 
                     if (strpos($item, 'SELECT') === 0) {
                         $where .= $table . $key . $operand . '(' . $item . ") $condition";
+                    } elseif ($item === null || $item === 'NULL') {
+                        if ($operand === '=') $where .= $table . $key . ' IS NULL ' . $condition;
+                        else $where .= $table . $key . ' IS NOT NULL ' . $condition;
                     } else {
                         $where .= $table . $key . $operand . "'" . addslashes($item) . "' $condition";
                     }
