@@ -16,7 +16,7 @@
                                 <input id="<?= $name ?>-<?= $item['id'] ?>" type="checkbox"
                                        name="<?= $row ?>[<?= $name ?>][]"
                                        value="<?= $item['id'] ?>"
-                                    <?php if (in_array($item['id'], $this->data[$row]['name'])) echo 'checked' ?>>
+                                    <?php if (in_array($item['id'], $this->data[$row][$name])) echo 'checked' ?>>
                                 <span class="custom_check backgr_bef"></span>
                                 <span class="label"><?= $item['name'] ?></span>
                             </label>
