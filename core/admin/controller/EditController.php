@@ -35,7 +35,9 @@ class EditController extends BaseAdmin {
 
     protected function createData() {
 
-        $id = $this->clearNum($this->parameters[$this->table]);
+        $id = is_numeric($this->parameters[$this->table]) ?
+            $this->clearNum($this->parameters[$this->table]) :
+            $this->clearStr($this->parameters[$this->table]);
 
         if (!$id) throw new RouteException('Invalid identifier - ' . $id .
             ' while editing the table - ' . $this->table);

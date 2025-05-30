@@ -62,6 +62,8 @@ class Settings {
         'gallery_img' => ['gallery_img'],
     ];
 
+    private $fileTemplates = ['img', 'gallery_img'];
+
     private $translate = [
         'name' => ['name', 'No more than 100 characters'],
         'keywords' => ['Keywords', 'No more than 70 characters'],
@@ -74,7 +76,7 @@ class Settings {
 
     private $rootItems = [
         'name' => 'Root',
-        'tables' => ['articles']
+        'tables' => ['articles', 'filters']
     ];
 
     private $manyToMany = [
