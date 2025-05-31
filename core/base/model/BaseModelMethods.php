@@ -412,7 +412,7 @@ abstract class BaseModelMethods {
 
                 if (in_array($value, $this->sqlFunc)) {
                     $update .= $value . ',';
-                } elseif ($value === NULL) {
+                } elseif ($value === NULL || $value === 'NULL') {
                     $update .= "NULL" . ',';
                 } else {
                     $update .= "'" . addslashes($value) . "',";
@@ -433,8 +433,7 @@ abstract class BaseModelMethods {
         return rtrim($update, ',');
     }
 
-    protected
-    function joinStructure($res, $table) {
+    protected function joinStructure($res, $table) {
 
         $join_arr = [];
 

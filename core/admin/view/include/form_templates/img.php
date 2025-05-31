@@ -13,10 +13,13 @@
             <label for="<?= $row ?>" class="vg-wrap vg-full file_upload vg-left">
                 <span class="vg-element vg-full vg-input vg-text vg-left vg-button"
                       style="float: left; margin-right: 10px">Choose</span>
-                <a style="color:black" href=""
-                   class="vg-element vg-full vg-input vg-text vg-left vg-button vg_delete">
-                    <span>Delete</span>
-                </a>
+                <?php if (!empty($this->data[$row])) : ?>
+                    <a style="color:black"
+                       href="<?= $this->adminPath . 'delete/' . $this->table . '/' . $this->data[$this->columns['id_row']] . '/' . $row . '/' . base64_encode($this->data[$row]) ?>"
+                       class="vg-element vg-full vg-input vg-text vg-left vg-button vg_delete">
+                        <span>Delete</span>
+                    </a>
+                <?php endif; ?>
                 <input id="<?= $row ?>" type="file" name="<?= $row ?>" class="single_img"
                        accept="image/*,image/jpeg,image/png,image/gif">
             </label>
