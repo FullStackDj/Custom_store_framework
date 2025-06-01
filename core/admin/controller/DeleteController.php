@@ -153,7 +153,7 @@ class DeleteController extends BaseAdmin {
 
                             $updateFlag = true;
 
-                            @unlink($_SERVER['DOCUMENT_ROOT'] . PATH . UPLOAD_DIR . $value);
+                            @unlink($_SERVER['DOCUMENT_ROOT'] . PATH . UPLOAD_DIR . $item);
 
                             unset($data[$key]);
 
@@ -167,7 +167,7 @@ class DeleteController extends BaseAdmin {
 
                     $updateFlag = true;
 
-                    @unlink($_SERVER['DOCUMENT_ROOT'] . PATH . UPLOAD_DIR . $value);
+                    @unlink($_SERVER['DOCUMENT_ROOT'] . PATH . UPLOAD_DIR . $item);
 
                     $this->data[$row] = 'NULL';
                 }
