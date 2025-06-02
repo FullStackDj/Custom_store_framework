@@ -66,7 +66,7 @@ if (files.length) {
 
             let fileName = item.name;
 
-            let attributeName = item.name.replace(/[\[\]]g/, '');
+            let attributeName = fileName.replace(/[\[\]]/g, '');
 
             for (let i in this.files) {
 
@@ -74,6 +74,17 @@ if (files.length) {
 
                     if (multiple) {
 
+                        if (typeof fileStore[fileName] === 'undefined') {
+                            fileStore[fileName] = []
+                        }
+
+                        let elId = fileStore[fileName].push(this.files[i]) - 1;
+
+                        container[i].setAttribute(`data-deleteFileId-${attributeName}`, elId);
+
+                        showImage(this.files[i], container[i]);
+
+                        deleteNewFiles(elId, fileName, attributeName, container[i]);
 
                     } else {
 
@@ -85,6 +96,16 @@ if (files.length) {
             }
         }
     })
+
+    function deleteNewFiles(elId, fileName, attributeName, container) {
+
+        container.addEventListener('click', function () {
+
+            this.remove();
+
+            delete fileStore[fileName][elId];
+        });
+    }
 
     function showImage(item, container) {
 
@@ -100,7 +121,7 @@ if (files.length) {
 
             container.querySelector('img').setAttribute('src', e.target.result);
 
-
+            container.classList.remove('empty_container')
         }
     }
 }
