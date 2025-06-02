@@ -1,4 +1,4 @@
-<form id="main-form" class="vg-wrap vg-element vg-ninteen-of-twenty" method="post"
+<form id="main-form" id="main-form" class="vg-wrap vg-element vg-ninteen-of-twenty" method="post"
       action="<?= $this->adminPath . $this->action ?>"
       enctype="multipart/form-data">
     <div class="vg-wrap vg-element vg-full">

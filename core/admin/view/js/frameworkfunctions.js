@@ -77,3 +77,13 @@ const Ajax = (set) => {
 
     });
 }
+
+function isEmpty(arr) {
+
+    for (let i in arr) {
+
+        return false;
+    }
+
+    return true;
+}

@@ -21,107 +21,143 @@ function createSitemap() {
         });
 }
 
-let files = document.querySelectorAll('input[type=file]')
+createFile();
 
-let fileStore = [];
+function createFile() {
+    let files = document.querySelectorAll('input[type=file]')
 
-if (files.length) {
+    let fileStore = [];
 
-    files.forEach(item => {
+    if (files.length) {
 
-        item.onchange = function () {
+        files.forEach(item => {
 
-            let multiple = false;
+            item.onchange = function () {
 
-            let parentContainer;
+                let multiple = false;
 
-            let container;
+                let parentContainer;
 
-            if (item.hasAttribute('multiple')) {
+                let container;
 
-                multiple = true;
+                if (item.hasAttribute('multiple')) {
 
-                parentContainer = this.closest('.gallery_container');
+                    multiple = true;
 
-                if (!parentContainer) {
-                    return false;
-                }
+                    parentContainer = this.closest('.gallery_container');
 
-                container = parentContainer.querySelectorAll('.empty_container');
-
-                if (container.length < this.files.length) {
-
-                    for (let index = 0; index < this.files.length - container.length; index++) {
-
-                        let el = document.createElement('div');
-
-                        el.classList.add('vg-dotted-square', 'vg-center', 'empty_container');
-
-                        parentContainer.append(el);
+                    if (!parentContainer) {
+                        return false;
                     }
 
                     container = parentContainer.querySelectorAll('.empty_container');
-                }
-            }
 
-            let fileName = item.name;
+                    if (container.length < this.files.length) {
 
-            let attributeName = fileName.replace(/[\[\]]/g, '');
+                        for (let index = 0; index < this.files.length - container.length; index++) {
 
-            for (let i in this.files) {
+                            let el = document.createElement('div');
 
-                if (this.files.hasOwnProperty(i)) {
+                            el.classList.add('vg-dotted-square', 'vg-center', 'empty_container');
 
-                    if (multiple) {
-
-                        if (typeof fileStore[fileName] === 'undefined') {
-                            fileStore[fileName] = []
+                            parentContainer.append(el);
                         }
 
-                        let elId = fileStore[fileName].push(this.files[i]) - 1;
+                        container = parentContainer.querySelectorAll('.empty_container');
+                    }
+                }
 
-                        container[i].setAttribute(`data-deleteFileId-${attributeName}`, elId);
+                let fileName = item.name;
 
-                        showImage(this.files[i], container[i]);
+                let attributeName = fileName.replace(/[\[\]]/g, '');
 
-                        deleteNewFiles(elId, fileName, attributeName, container[i]);
+                for (let i in this.files) {
 
-                    } else {
+                    if (this.files.hasOwnProperty(i)) {
 
-                        container = this.closest('.img_container').querySelector('.img_show');
+                        if (multiple) {
 
-                        showImage(this.files[i], container);
+                            if (typeof fileStore[fileName] === 'undefined') {
+                                fileStore[fileName] = []
+                            }
+
+                            let elId = fileStore[fileName].push(this.files[i]) - 1;
+
+                            container[i].setAttribute(`data-deleteFileId-${attributeName}`, elId);
+
+                            showImage(this.files[i], container[i]);
+
+                            deleteNewFiles(elId, fileName, attributeName, container[i]);
+
+                        } else {
+
+                            container = this.closest('.img_container').querySelector('.img_show');
+
+                            showImage(this.files[i], container);
+                        }
                     }
                 }
             }
+        })
+
+        let form = document.querySelector('#main-form');
+
+        if (form) {
+
+            form.onsubmit = function (e) {
+
+                if (!isEmpty(fileStore)) {
+
+                    e.preventDefault();
+
+                    let forData = new FormData(this);
+
+                    for (let i in fileStore) {
+
+                        if (fileStore.hasOwnProperty(i)) {
+
+                            forData.delete(i);
+
+                            let rowName = i.replace(/[/[/]]/g, '');
+
+                            fileStore[i].forEach((item, index) => {
+
+                                forData.append(`${rowName}[${index}]`, item);
+                            });
+                        }
+                    }
+
+                    forData.append('ajax', 'editData')
+                }
+            }
         }
-    })
 
-    function deleteNewFiles(elId, fileName, attributeName, container) {
+        function deleteNewFiles(elId, fileName, attributeName, container) {
 
-        container.addEventListener('click', function () {
+            container.addEventListener('click', function () {
 
-            this.remove();
+                this.remove();
 
-            delete fileStore[fileName][elId];
-        });
-    }
+                delete fileStore[fileName][elId];
+            });
+        }
 
-    function showImage(item, container) {
+        function showImage(item, container) {
 
-        let reader = new FileReader();
+            let reader = new FileReader();
 
-        container.innerHTML = '';
+            container.innerHTML = '';
 
-        reader.readAsDataURL(item);
+            reader.readAsDataURL(item);
 
-        reader.onload = (e) => {
+            reader.onload = (e) => {
 
-            container.innerHTML = '<img class="img_item" src="">';
+                container.innerHTML = '<img class="img_item" src="">';
 
-            container.querySelector('img').setAttribute('src', e.target.result);
+                container.querySelector('img').setAttribute('src', e.target.result);
 
-            container.classList.remove('empty_container')
+                container.classList.remove('empty_container')
+            }
         }
     }
 }
