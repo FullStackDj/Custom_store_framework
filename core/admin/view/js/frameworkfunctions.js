@@ -6,6 +6,11 @@ const Ajax = (set) => {
         set.url = typeof PATH !== 'undefined' ? PATH : '/';
     }
 
+    if (typeof set.ajax === 'undefined') {
+
+        set.ajax = true;
+    }
+
     if (typeof set.type === 'undefined' || !set.type) set.type = 'GET';
 
     set.type = set.type.toUpperCase();
@@ -14,17 +19,27 @@ const Ajax = (set) => {
 
     if (typeof set.data !== 'undefined' && set.data) {
 
-        for (let i in set.data) {
-            body += '&' + i + '=' + set.data[i];
+        if (typeof set.processData !== 'undefined' && !set.processData) {
+
+            body = set.data;
+
+        } else {
+
+            for (let i in set.data) {
+
+                if (set.data.hasOwnProperty(i)) {
+                    body += '&' + i + '=' + set.data[i];
+                }
+            }
+
+            body = body.substring(1);
+
+            if (typeof ADMIN_MODE !== 'undefined') {
+
+                body += body ? '&' : '';
+                body += 'ADMIN_MODE=' + ADMIN_MODE;
+            }
         }
-
-        body = body.substring(1);
-    }
-
-    if (typeof ADMIN_MODE !== 'undefined') {
-
-        body += body ? '&' : '';
-        body += 'ADMIN_MODE=' + ADMIN_MODE;
     }
 
     if (set.type === 'GET') {
@@ -44,15 +59,22 @@ const Ajax = (set) => {
         if (typeof set.headers !== 'undefined' && set.headers) {
 
             for (let i in set.headers) {
-                xhr.setRequestHeader(i, set.headers['i']);
 
-                if (i.toLowerCase() === 'content-type') contentType = true;
+                if (set.headers.hasOwnProperty(i)) {
+                    xhr.setRequestHeader(i, set.headers[i]);
+
+                    if (i.toLowerCase() === 'content-type') contentType = true;
+                }
             }
         }
 
-        if (!contentType) xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
+        if (!contentType && (typeof set.contentType === 'undefined' || set.contentType)) {
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
+        }
 
-        xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+        if (set.ajax) {
+            xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+        }
 
         xhr.onload = function () {
 

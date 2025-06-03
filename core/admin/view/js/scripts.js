@@ -127,7 +127,31 @@ function createFile() {
                         }
                     }
 
-                    forData.append('ajax', 'editData')
+                    forData.append('ajax', 'editData');
+
+                    Ajax({
+                        url: this.getAttribute('action'),
+                        type: 'post',
+                        data: forData,
+                        processData: false,
+                        contentType: false,
+                    }).then(res => {
+
+                        try {
+
+                            res = JSON.parse(res);
+
+                            if (!res.success) {
+                                throw new Error();
+                            }
+
+                            location.reload();
+
+                        } catch (e) {
+
+                            alert('An internal error occurred');
+                        }
+                    });
                 }
             }
         }

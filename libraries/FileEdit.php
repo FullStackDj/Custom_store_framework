@@ -18,7 +18,7 @@ class FileEdit {
 
                 $file_arr = [];
 
-                for ($i = 0; $i < count($file['name']); $i++) {
+                foreach ($file['name'] as $i => $value) {
 
                     if (!empty($file['name'][$i])) {
 
@@ -48,7 +48,8 @@ class FileEdit {
         return $this->getFiles();
     }
 
-    protected function createFile($file) {
+    protected
+    function createFile($file) {
 
         $fileNameArr = explode('.', $file['name']);
         $ext = $fileNameArr[count($fileNameArr) - 1];
@@ -68,14 +69,16 @@ class FileEdit {
         return false;
     }
 
-    protected function uploadFile($tmpName, $dest) {
+    protected
+    function uploadFile($tmpName, $dest) {
 
         if (move_uploaded_file($tmpName, $dest)) return true;
 
         return false;
     }
 
-    protected function checkFile($fileName, $ext, $fileLastName = '') {
+    protected
+    function checkFile($fileName, $ext, $fileLastName = '') {
 
         if (!file_exists($this->directory . $fileName . $fileLastName . '.' . $ext))
             return $fileName . $fileLastName . '.' . $ext;
@@ -83,7 +86,8 @@ class FileEdit {
         return $this->checkFile($fileName, $ext, '_' . hash('crc32', time() . mt_rand(1, 1000)));
     }
 
-    public function getFiles() {
+    public
+    function getFiles() {
 
         return $this->imgArr;
     }
