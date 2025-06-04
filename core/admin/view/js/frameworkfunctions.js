@@ -109,3 +109,10 @@ function isEmpty(arr) {
 
     return true;
 }
+
+function errorAlert() {
+
+    alert('An internal error occurred');
+
+    return false;
+}

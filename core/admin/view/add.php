@@ -11,7 +11,7 @@
 
                 <?php if (!$this->noDelete && $this->data): ?>
                     <div class="vg-element vg-padding-in-px">
-                        <a href="<?=$this->adminPath . 'delete/' . $this->table . '/' . $this->data[$this->columns['id_row']]?>"
+                        <a href="<?= $this->adminPath . 'delete/' . $this->table . '/' . $this->data[$this->columns['id_row']] ?>"
                            class="vg-text vg-firm-color1 vg-firm-background-color4 vg-input vg-button vg-center vg_delete">
                             <span>Delete</span>
                         </a>
@@ -22,7 +22,7 @@
     </div>
 
     <?php if ($this->data): ?>
-        <input type="hidden" name="<?= $this->columns['id_row'] ?>"
+        <input id="tableId" type="hidden" name="<?= $this->columns['id_row'] ?>"
                value="<?= $this->data[$this->columns['id_row']] ?>">
     <?php endif; ?>
 

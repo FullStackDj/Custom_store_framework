@@ -26,13 +26,19 @@ class BaseAjax extends BaseController {
 
         $ajax = new $controller;
 
-        $ajax->data = $data;
+        $ajax->ajaxData = $data;
 
-        return ($ajax->ajax());
+        $res = $ajax->ajax();
+
+        if (is_array($res) || is_object($res)) {
+
+            $res = json_encode($res);
+
+        } elseif (is_int($res)) {
+
+            $res = (float)$res;
+        }
+
+        return $res;
     }
-
-    protected function createAjaxData($data) {
-        $this->data = $data;
-    }
-
 }
